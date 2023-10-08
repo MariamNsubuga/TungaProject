@@ -31,13 +31,39 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken', #allow us to use token authentication
+    'notebookapi',
+    'users',
+    #handle authentication
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    #added
+    'allauth.socialaccount',
+    
+    
+   
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+            # 'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+            # 'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication', #using the Json web token
+        'rest_framework_simplejwt.authentication.JWTAuthentication', 
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -47,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'notebook.urls'
@@ -67,7 +94,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'notebook.wsgi.application'
+# WSGI_APPLICATION = 'notebook.wsgi.application'
 
 
 # Database
@@ -121,3 +148,35 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SITE_ID = 1
+
+REST_USE_JWT = True
+
+JWT_AUTH_COOKIE = 'my-app-auth'
+
+#allow users to be authenticated upon login and also  allow them to log in to the Django admin
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mariamtestn@gmail.com'
+EMAIL_HOST_PASSWORD = 'khwnkmfjwimbddgl'
+EMAIL_USE_SSL = False
+# EMAIL_enable_starttls_auto => trueauthentication       => "plain",
+#    :enable_starttls_auto => true :authentication       => "plain",
+   
+# specified  that the email should be used for authentication instead of the username
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+#allow the website to verify the user when the user opens the link received in the email. 
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+
+# user to be redirected to the LOGIN_URL after verification, so we specified our LOGIN_URl
+LOGIN_URL = 'http://localhost:8000/users/login'
