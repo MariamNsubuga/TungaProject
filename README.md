@@ -1,5 +1,6 @@
-#Notebook api
-nstructions on how to run the project locally
+#Notebook api 
+
+instructions on how to run the project locally
 
 clone the repo: git clone https://github.com/MariamNsubuga/TungaProject.git
 #create a virtual environment
