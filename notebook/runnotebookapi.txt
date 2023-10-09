@@ -1,0 +1,39 @@
+after running python3 manage.py runserver this url will show http://localhost:8000/
+there will be many folders
+/admin == for super users only
+/users == for authorisation  and authentiction
+/api/note == for accessing the notebook api
+(password-reset/ and password-reset-confirm/<uidb64>/<token>/ [name='password_reset_confirm'])== password reseting 
+
+
+http://localhost:8000/users/login/  == for logining such that a user can see their notes
+http://localhost:8000/users/register/ == for new users to register and start to use the api
+http://localhost:8000/users/ logout/ == for leaving the api application. loggin out
+http://localhost:8000/users/ verify-email/ [name='rest_verify_email'] == verify the email after register it will be a redirect after register. it will be sent to email
+/http://localhost:8000/users/ account-confirm-email/ [name='account_email_verification_sent'] == for verification 
+http://localhost:8000/users/ ^account-confirm-email/(?P<key>[-:\w]+)/$ [name='account_confirm_email']
+http://localhost:8000/password-reset/ == for reseting passwords
+http://localhost:8000/password-reset-confirm/<uidb64>/<token>/ [name='password_reset_confirm'] == confirming password after reset
+
+
+#email
+http://localhost:8000/api/note/email
+{
+    "email":"fill in the email to send to",
+    "pk":"id of the note to send"
+}
+#excel
+http://localhost:8000/api/note/excel
+download option will pop up
+
+#csv
+http://localhost:8000/api/note/csv
+download option will pop up
+
+#pdf
+http://localhost:8000/api/note/pdf
+download option will pop up
+
+#CRUD 
+http://localhost:8000/api/note/{pk}
+incase you want to edit, update or delete a particular note replace {pk} with a number you want to edit

@@ -84,75 +84,7 @@ class NoteDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = NoteSerializer
 
 
-'''
-Export all the notes list to pdf and csv (5 points)
-Share or publish the notes list over an email (5 points)
-Set the email reminder for a note
-
-'''
-
-
-
-
-'''
-Share or Publish Notes via Email:
-'''
-# permission_classes = [IsAuthenticated] 
-# authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-# def send_notes_email(subject, message, to_email, attachment_path=None):
-#     email = EmailMessage(subject, message, to=[to_email])
-
-#     if attachment_path:
-#         email.attach_file(attachment_path)
-
-#     email.send()
-# class ShareNotesEmailView(View):
-#     permission_classes = [IsAuthenticated] 
-#     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-#     def post(self, request, *args, **kwargs):
-#         # Retrieve notes and recipient email from request
-#         notes = Note.objects.all()
-#         recipient_email = request.data.get('recipient_email')
-
-#         # Generate PDF or CSV file
-#         attachment_path = self.generate_pdf_or_csv(notes)  # Replace with actual code
-
-#         # Send the email
-#         send_notes_email("Notes", "Here are your notes.", recipient_email, attachment_path)
-
-#         return JsonResponse({'message': 'Email sent successfully'})
-
-class ShareNotesEmailView(APIView):
-    permission_classes = [IsAuthenticated] 
-    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-    def post(self, request):
-        # # Retrieve the data you want to share
-        # notes = Note.objects.all()
-        # serializer = NoteSerializer(notes, many=True)
-        # note_data = serializer.data
-
-        # # Get the recipient's email address from the request
-        # to_email = request.data.get('email')
-
-        # # Send the email
-        # send_note_data_email(to_email, str(note_data))
-
-        # return Response({'message': 'note data shared via email successfully'})
-        
-        recipient_email = request.data.get('recipient_email')
-        subject = "Your Note Data"
-        
-        # Query your Note model to get the data you want to share
-        notes = Note.objects.all()
-        serializer = NoteSerializer(notes, many=True)
-        message = "\n".join([f"{note['title']}: {note['content']}" for note in serializer.data])
-        
-        try:
-            send_note_data_email(recipient_email, subject, message)
-            return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'message': 'Email could not be sent'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+   
 
 #generating pdf and csv
 '''
