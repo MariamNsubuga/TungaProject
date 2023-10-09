@@ -50,21 +50,33 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     #added
     'allauth.socialaccount',
+    #django filter
+    'django_filters'
     
     
    
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
             # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
             # 'rest_framework.authentication.SessionAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication', #using the Json web token
         'rest_framework_simplejwt.authentication.JWTAuthentication', 
-    )
+    ],
+    'DEFAULT_FILTER_BACKENDS':(
+        'django_filters.rest_framework.DjangoFilterBackend', 
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ),
 }
-
+JWT_AUTH = {
+    'JWT_SECRET_KEY': 'your-secret-key',
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': None
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -167,8 +179,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'mariamtestn@gmail.com'
 EMAIL_HOST_PASSWORD = 'khwnkmfjwimbddgl'
 EMAIL_USE_SSL = False
-# EMAIL_enable_starttls_auto => trueauthentication       => "plain",
-#    :enable_starttls_auto => true :authentication       => "plain",
+
    
 # specified  that the email should be used for authentication instead of the username
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -177,6 +188,7 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 #allow the website to verify the user when the user opens the link received in the email. 
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGOUT_ON_GET = True
 
 # user to be redirected to the LOGIN_URL after verification, so we specified our LOGIN_URl
 LOGIN_URL = 'http://localhost:8000/users/login'
