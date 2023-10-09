@@ -28,8 +28,17 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.decorators import api_view
-from .utils import *
 import csv
+#excel packages
+import openpyxl
+from openpyxl import Workbook
+from openpyxl.styles import NamedStyle
+from openpyxl.utils import get_column_letter
+from openpyxl.drawing.image import Image
+from openpyxl.utils import get_column_letter
+from datetime import datetime, timezone
+
+# from openpyxl.writer.excel import save_virtual_workbook
 # Create your views here.
 
 
@@ -58,8 +67,8 @@ class NoteList(ListCreateAPIView):
     #searching notes
     search_fields = ['title']
     #due dates
-    category = Note.objects.filter(date_created__lt=timezone.now(), category='overdue')
-    
+    # category = Note.objects.filter(date_created__lt=timezone.now(), category='overdue')
+    category = Note.objects.filter(date_created__lt=datetime.now(), category='overdue')
     
 
 '''
@@ -184,7 +193,44 @@ class GenerateCSVView(APIView):
         return response
 
 
+#generating excel
 
 
+
+class GenerateExcelView(APIView):
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+    def get(self, request):
+        # Create an Excel workbook and add a worksheet
+        wb = Workbook()
+        ws = wb.active
+        # ws.title = "Note list"
+
+        # Define column headers and styles
+        ws.append(["Title", "Content", "Created At","Category"])
+        # date_style = NamedStyle(name='datetime', number_format='YYYY-MM-DD HH:MM:SS')
+        # ws.cell(row=1, column=3).style = date_style
+
+        # Retrieve and add notes to the worksheet
+        notes = Note.objects.all()
+        serializer = NoteSerializer(notes, many=True)
+        for item in serializer.data:
+            ws.append([item['title'],item['body'], item['date_created'],item['category']])
+        
+
+        # Create an HttpResponse with the Excel content
+        response = HttpResponse(
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        response[
+            "Content-Disposition"
+        ] = 'attachment; filename="note_list.xlsx"'
+
+        # Save the workbook to the response
+        # xlsx_data = save_virtual_workbook(wb)
+        xlsx_data = wb.save(response)
+        response.write(xlsx_data)
+
+        return response
 
 

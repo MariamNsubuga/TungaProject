@@ -57,10 +57,12 @@ INSTALLED_APPS = [
     'reportlab',
     
     
+    
    
 ]
 
 REST_FRAMEWORK = {
+    #for authentication and authorising 
     'DEFAULT_AUTHENTICATION_CLASSES': [
             # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
@@ -68,11 +70,20 @@ REST_FRAMEWORK = {
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication', #using the Json web token
         'rest_framework_simplejwt.authentication.JWTAuthentication', 
     ],
+    #for filtering,searching and ordering
     'DEFAULT_FILTER_BACKENDS':(
         'django_filters.rest_framework.DjangoFilterBackend', 
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ),
+    #for excel generation
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'drf_excel.renderers.XLSXRenderer',
+    ),
+    #date
+    # 'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S",
 }
 JWT_AUTH = {
     'JWT_SECRET_KEY': 'your-secret-key',

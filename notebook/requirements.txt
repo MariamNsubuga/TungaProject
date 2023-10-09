@@ -34,7 +34,9 @@ django-rest-framework==0.1.0
 djangorestframework==3.14.0
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==5.3.0
+drf-excel==2.4.0
 duplicity==0.8.21
+et-xmlfile==1.1.0
 fasteners==0.14.1
 feedparser==6.0.8
 filelock==3.9.0
@@ -69,6 +71,7 @@ netifaces==0.11.0
 numpy==1.21.5
 oauthlib==3.2.0
 olefile==0.46
+openpyxl==3.1.2
 packaging==21.3
 paramiko==2.9.3
 pexpect==4.8.0
