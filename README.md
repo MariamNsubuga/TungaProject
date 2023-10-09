@@ -3,6 +3,7 @@
 instructions on how to run the project locally
 
 clone the repo: git clone https://github.com/MariamNsubuga/TungaProject.git
+
 #create a virtual environment
 
 sudo apt install python3-venv
