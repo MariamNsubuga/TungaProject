@@ -37,7 +37,8 @@ from openpyxl.utils import get_column_letter
 from openpyxl.drawing.image import Image
 from openpyxl.utils import get_column_letter
 from datetime import datetime, timezone
-
+#send email
+from django.core.mail import send_mail
 # from openpyxl.writer.excel import save_virtual_workbook
 # Create your views here.
 
@@ -234,3 +235,35 @@ class GenerateExcelView(APIView):
         return response
 
 
+'''
+share a particular note via email
+'''
+
+permission_classes = [IsAuthenticated] 
+authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+@api_view(['POST'])
+def send_notes_via_email(request):
+   
+    # Validate the email and pk
+    share_note_serializer = ShareNoteSerializer(data=request.data)
+    if share_note_serializer.is_valid():
+        email = share_note_serializer.validated_data['email']
+        pk = share_note_serializer.validated_data['pk']
+    else:
+        return Response({'error': 'Invalid email or pk'}, status=400)
+
+    try:
+        # Retrieve the note associated with the provided pk
+        note = Note.objects.get(id=pk)
+    except Note.DoesNotExist:
+        return Response({'error': 'Note not found'}, status=404)
+
+    subject = f'Shared Note: {note.title}'
+    message = f'Title: {note.title}\nContent: {note.body}\nDate: {note.date_created}\nCategory: {note.category}'
+
+    from_email = 'mariamtestn@gmail.com'  
+    recipient_list = [email]
+
+    send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+
+    return Response({'message': 'Note sent via email'})

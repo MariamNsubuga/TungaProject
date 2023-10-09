@@ -1,5 +1,6 @@
 from rest_framework import serializers 
 from .models import *
+from django.core.validators import EmailValidator
 
 '''
 This class is for removing the timezone off the datetime field
@@ -10,7 +11,15 @@ class RemoveTimeZone(serializers.DateTimeField):
         if value:
             return value.strftime('%Y-%m-%d %H:%M:%S')
         return None
-
+'''
+email 
+'''
+class ShareNoteSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    pk = serializers.IntegerField()
+'''
+This is the note serializer
+'''
 class NoteSerializer(serializers.ModelSerializer):
     date_created = RemoveTimeZone()
     class Meta:

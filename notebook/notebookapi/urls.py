@@ -9,10 +9,11 @@ urlpatterns = [
 
     path('', NoteList.as_view()),
     path('/<int:pk>', NoteDetail.as_view()),
-    path('/email', ShareNotesEmailView.as_view(), name='share-notes-email'),
+    path('/emails', ShareNotesEmailView.as_view(), name='share-notes-email'),
     path('/pdf', GeneratePDFView.as_view()),
     path('/csv', GenerateCSVView.as_view()),
     path('/excel/', GenerateExcelView.as_view()),
+    path('/email', send_notes_via_email, name='send-notes-via-email'),
     
     
 ]
