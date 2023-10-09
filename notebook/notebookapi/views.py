@@ -17,7 +17,9 @@ from reportlab.pdfgen import canvas
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
 import io
-
+from django.conf import settings
+from django.http import HttpResponse
+import os
 #email packages
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
@@ -26,6 +28,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.decorators import api_view
+from .utils import *
+import csv
 # Create your views here.
 
 
@@ -77,68 +81,8 @@ Set the email reminder for a note
 
 '''
 
-'''
-generate PDF and CSV files of your notes.  create a PDF export view:
-'''
-class ExportPDFView(View):
-    permission_classes = [IsAuthenticated] 
-    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-    def get(self, request, *args, **kwargs):
-        
-        noted = Note.objects.all()
 
-        # Create an in-memory binary stream for the PDF file
-        response = io.BytesIO()
 
-        # Create a PDF document with ReportLab
-        p = canvas.Canvas(response)
-
-        # Add data to the PDF (customize this part as needed)
-        for notey in noted:
-            p.drawString(100, 700, f"Title: {notey.title}")
-            p.drawString(100, 680, f"Body: {notey.body}")
-            p.drawString(100, 660, f"date_created: {notey.date_created}")
-            p.drawString(100, 640, f"category: {notey.category}")
-
-        p.showPage()
-        p.save()
-
-        # Create a FileResponse and set appropriate headers
-        response.seek(0)
-        return FileResponse(response, as_attachment=True, filename="notes.pdf")
-    
-    # def get(self, request):
-    #     notes = Note.objects.all()
-    #     response = FileResponse(self.generate_pdf(notes), content_type='application/pdf')
-    #     response['Content-Disposition'] = 'attachment; filename="notes.pdf"'
-    #     return response
-
-    # def generate_pdf(self, notes):
-    #     buffer = io.BytesIO()
-    #     p = canvas.Canvas(buffer)
-    #     # Generate csv content here, e.g., loop through notes and add to PDF
-    #     p.showPage()
-    #     p.save()
-    #     buffer.seek(0)
-    #     return buffer
-
-class ExportCSVView(View):
-    permission_classes = [IsAuthenticated] 
-    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-    def get(self, request, *args, **kwargs):
-        notes = Note.objects.all()
-        response = FileResponse(self.generate_csv(notes), content_type='application/csv')
-        response['Content-Disposition'] = 'attachment; filename="notes.csv"'
-        return response
-
-    def generate_csv(self, notes):
-        buffer = io.BytesIO()
-        p = canvas.Canvas(buffer)
-        # Generate csv content here, e.g., loop through notes and add to PDF
-        p.showPage()
-        p.save()
-        buffer.seek(0)
-        return buffer
 
 '''
 Share or Publish Notes via Email:
@@ -171,7 +115,6 @@ Share or Publish Notes via Email:
 class ShareNotesEmailView(APIView):
     permission_classes = [IsAuthenticated] 
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
-    @api_view(['POST'])
     def post(self, request):
         # # Retrieve the data you want to share
         # notes = Note.objects.all()
@@ -182,9 +125,9 @@ class ShareNotesEmailView(APIView):
         # to_email = request.data.get('email')
 
         # # Send the email
-        # send_blog_data_email(to_email, str(note_data))
+        # send_note_data_email(to_email, str(note_data))
 
-        # return Response({'message': 'Blog data shared via email successfully'})
+        # return Response({'message': 'note data shared via email successfully'})
         
         recipient_email = request.data.get('recipient_email')
         subject = "Your Note Data"
@@ -199,3 +142,49 @@ class ShareNotesEmailView(APIView):
             return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'message': 'Email could not be sent'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+#generating pdf and csv
+'''
+generate PDF and CSV files of your notes.  create a PDF export view:
+'''
+
+class GeneratePDFView(APIView):
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+    def get(self, request):
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="note_list.pdf"'
+
+        p = canvas.Canvas(response)
+        notes = Note.objects.all()
+        for note in notes:
+            p.drawString(100, 700, f"Title: {note.title}")
+            p.drawString(100, 680, f"Content: {note.body}")
+            p.drawString(100, 660, f"date_created: {note.date_created}")
+            p.drawString(100, 640, f"category: {note.category}")
+            p.showPage()
+        p.save()
+
+        return response
+
+class GenerateCSVView(APIView):
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+    def get(self, request):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="note_list.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['Title', 'Content','Date','Category'])
+        notes = Note.objects.all()
+        for note in notes:
+            writer.writerow([note.title, note.body, note.date_created, note.category])
+
+        return response
+
+
+
+
+
+
