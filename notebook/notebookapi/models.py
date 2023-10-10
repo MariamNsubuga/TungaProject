@@ -7,6 +7,7 @@ class Note(models.Model):
     title =models.CharField(max_length =100)
     body =models.CharField(max_length =100)
     date_created =models.DateTimeField(blank=True, null=True,default="datetime.date.today")
+   
     # category = models.CharField(max_length=100)
     CATEGORY_CHOICES = (
         ('unfinished', 'Unfinished'),

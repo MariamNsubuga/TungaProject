@@ -10,11 +10,12 @@ http://localhost:8000/users/login/  == for logining such that a user can see the
 http://localhost:8000/users/register/ == for new users to register and start to use the api
 http://localhost:8000/users/ logout/ == for leaving the api application. loggin out
 http://localhost:8000/users/ verify-email/ [name='rest_verify_email'] == verify the email after register it will be a redirect after register. it will be sent to email
-/http://localhost:8000/users/ account-confirm-email/ [name='account_email_verification_sent'] == for verification 
+/http://localhost:8000/users/ account-confirm-email/ [name='account_email_verification_sent'] == for verification of email
 http://localhost:8000/users/ ^account-confirm-email/(?P<key>[-:\w]+)/$ [name='account_confirm_email']
 http://localhost:8000/password-reset/ == for reseting passwords
-http://localhost:8000/password-reset-confirm/<uidb64>/<token>/ [name='password_reset_confirm'] == confirming password after reset
+http://localhost:8000/password-reset-confirm/<uidb64>/<token>/ [name='password_reset_confirm'] == confirming password after reset sent via email
 
+#after registering and signing in the following will be accessed
 
 #email
 http://localhost:8000/api/note/email

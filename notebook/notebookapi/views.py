@@ -66,7 +66,7 @@ class NoteList(ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = NoteFilter
     #searching notes
-    search_fields = ['title']
+    search_fields = ['title','body','date_created','category']
     #due dates
     # category = Note.objects.filter(date_created__lt=timezone.now(), category='overdue')
     category = Note.objects.filter(date_created__lt=datetime.now(), category='overdue')
