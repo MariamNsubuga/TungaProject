@@ -55,13 +55,27 @@ INSTALLED_APPS = [
     #creating pdf and csv
     # 'django-csv',
     'reportlab',
+    'celery'
     
     
     
    
 ]
 # AUTH_USER_MODEL = 'users.CustomUser'
+#celery configuration 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # r broker URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  #  backend URL
+# USE_TZ = False
+# Enable UTC for datetime handling
+CELERY_ENABLE_UTC = True
 
+# Schedule periodic tasks
+CELERY_BEAT_SCHEDULE = {
+    'send-reminders': {
+        'task': 'notebookapi.tasks.send_reminders',
+        'schedule': 3600,  # Schedule the task to run every hour 
+    },
+}
 REST_FRAMEWORK = {
     #for authentication and authorising 
     'DEFAULT_AUTHENTICATION_CLASSES': [

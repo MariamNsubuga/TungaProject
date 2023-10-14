@@ -4,12 +4,6 @@ from rest_framework.authentication import *
 
 from django.core.mail import EmailMessage
 
-# def send_blog_data_email(to_email, blog_data):
-#     subject = "Blog Data"
-#     message = "Here is the latest blog data:\n\n" + blog_data
-
-#     email = EmailMessage(subject, message, to=[to_email])
-#     email.send()
 
 from django.core.mail import send_mail
 permission_classes = [IsAuthenticated] 

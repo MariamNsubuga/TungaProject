@@ -63,7 +63,7 @@ class NoteList(ListCreateAPIView):
     #ordering notes
     ordering_fields = ( 
         'date_created', 
-        # 'Overdue'
+        'due_date',
         #does not make sense to order by category when we are already filtering by category
         'category'   
     )

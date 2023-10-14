@@ -24,4 +24,4 @@ class NoteSerializer(serializers.ModelSerializer):
     date_created = RemoveTimeZone()
     class Meta:
         model = Note
-        fields = ('pk', 'title', 'body', 'date_created', 'category')
+        fields = ('pk', 'title', 'body', 'date_created', 'category','due_date')
