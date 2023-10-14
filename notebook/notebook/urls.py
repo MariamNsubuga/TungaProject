@@ -19,6 +19,25 @@ from django.urls import path,include
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 from rest_framework_simplejwt import views as jwt_views 
 from notebookapi import views
+#swagger documentation urls
+from django.contrib import admin
+from django.urls import path, re_path, include
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Notebook Api",
+        default_version='v1',
+        description="Simple online notebook which is web based application  used for loging personal notes",
+        terms_of_service="https://www.example.com/terms/",
+        contact=openapi.Contact(email="mariam.nakanyike@gmail.com"),
+        license=openapi.License(name="Your License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('api/token/', 
@@ -33,7 +52,9 @@ urlpatterns = [
     #password reset
     path('password-reset/', PasswordResetView.as_view()),
     path('password-reset-confirm/<uidb64>/<token>/',PasswordResetConfirmView.as_view(), name='password_reset_confirm'),  
-   
+    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
 ]
 

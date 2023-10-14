@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     #creating pdf and csv
     # 'django-csv',
     'reportlab',
-    'celery'
+    'celery',
+    #api documentation
+    'drf_yasg',
     
     
     
@@ -97,6 +99,8 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'drf_excel.renderers.XLSXRenderer',
     ),
+    #api documentation
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     #date
     # 'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S",
 }
@@ -224,3 +228,6 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 # user to be redirected to the LOGIN_URL after verification, so we specified our LOGIN_URl
 LOGIN_URL = 'http://localhost:8000/users/login'
+
+# CORS settings (if needed)
+# CORS_ALLOW_ALL_ORIGINS = True

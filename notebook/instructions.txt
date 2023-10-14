@@ -43,3 +43,8 @@ incase you want to edit, update or delete a particular note replace {pk} with a 
 run celery -A notebook worker -l info   (celery worker)
 celery -A notebook beat -l info (celery beat)
 make sure redis server is up and running (open in different terminals)
+
+#documentating the api
+used swagger for the api documentation
+http://localhost:8000/swagger/
+http://localhost:8000/redoc/
