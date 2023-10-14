@@ -38,3 +38,8 @@ download option will pop up
 #CRUD 
 http://localhost:8000/api/note/{pk}
 incase you want to edit, update or delete a particular note replace {pk} with a number you want to edit
+
+#reminders
+run celery -A notebook worker -l info   (celery worker)
+celery -A notebook beat -l info (celery beat)
+make sure redis server is up and running (open in different terminals)
