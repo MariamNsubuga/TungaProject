@@ -39,6 +39,8 @@ from openpyxl.utils import get_column_letter
 from datetime import datetime, timezone
 #send email
 from django.core.mail import send_mail
+#permissions
+from .permissions import IsOwnerOrReadOnly
 # from openpyxl.writer.excel import save_virtual_workbook
 # Create your views here.
 
@@ -52,6 +54,9 @@ class NoteList(ListCreateAPIView):
     # queryset = Note.objects.all()
     queryset = Note.objects.all().order_by('-date_created') #sorts all the notes list by the latest date future dates first(-) makes it negative
     serializer_class = NoteSerializer
+    #permission so that owner deletes their own notes
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
     # filter_backends = [DjangoFilterBackend]
     filter_fields = ('category')
     search_fields =('category')
@@ -78,7 +83,7 @@ It also responds to PUT requests to update one or more of the fields of a tnote.
 It also deletes a note instance when a DELETE request is made.
 '''
 class NoteDetail(RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated] 
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
     queryset = Note.objects.all()
     serializer_class = NoteSerializer

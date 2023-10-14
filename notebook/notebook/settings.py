@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     
    
 ]
+# AUTH_USER_MODEL = 'users.CustomUser'
 
 REST_FRAMEWORK = {
     #for authentication and authorising 
@@ -119,6 +120,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 # WSGI_APPLICATION = 'notebook.wsgi.application'
 
