@@ -1,4 +1,4 @@
-# tasks.py
+
 from celery import shared_task
 from django.utils import timezone
 from .models import Note
@@ -17,7 +17,7 @@ def send_reminders():
    
 
     for note in notes:
-        subject = f'Reminder by celery: {note.title}'
+        subject = f'Reminder by celery for notebook: {note.title}'
         message = f'Reminder for the note: {note.body}\nDue Date: {note.due_date}'
         from_email = 'mariamtestn@gmail.com'  
         # recipient_list = [note.user.email]  
