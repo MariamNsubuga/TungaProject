@@ -1,3 +1,4 @@
+from django import apps
 from django.shortcuts import render,redirect
 from .models import *
 from .serializers import *
@@ -42,6 +43,10 @@ from django.core.mail import send_mail
 #permissions
 from .permissions import IsOwnerOrReadOnly
 # from openpyxl.writer.excel import save_virtual_workbook
+#reminders
+# from celery.schedules import crontab
+# from .tasks import send_due_date_reminders
+
 # Create your views here.
 
 
@@ -204,3 +209,12 @@ def send_notes_via_email(request):
     send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
     return Response({'message': 'Note sent via email'})
+
+#reminders
+# Schedule the task to run once, e.g., every day at midnight
+# apps.config.beat_schedule = {
+#     'send-due-date-reminders': {
+#         'task': 'your_app.tasks.send_due_date_reminders',
+#         'schedule': crontab(minute=55, hour=16),  # Set the schedule to run daily at midnight
+#     },
+# }

@@ -4,6 +4,7 @@ from django.utils import timezone
 from .models import Note
 from django.core.mail import send_mail
 import os
+# import logging
 
 @shared_task
 def send_reminders():
@@ -20,8 +21,12 @@ def send_reminders():
         subject = f'Reminder by celery for notebook: {note.title}'
         message = f'Reminder for the note: {note.body}\nDue Date: {note.due_date}'
         from_email = 'mariamtestn@gmail.com'  
-        # recipient_list = [note.user.email]  
-        recipient_list = 'mariam.nakanyike01@gmail.com' 
+        recipient_list = [note.user.email]  
+        # recipient_list = ['mariam.nakanyike01@gmail.com'] 
+        # Log email details for debugging
+        # logger.info(f"Sending email to {recipient_list} with subject: {subject}")
 
         send_mail(subject, message, from_email, recipient_list, fail_silently=False)
-
+        # Mark the note as a reminder sent to avoid duplicate reminders
+        note.is_reminder_sent = True
+        note.save()
