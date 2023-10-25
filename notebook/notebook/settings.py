@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     
     
     
+    
    
 ]
 # AUTH_USER_MODEL = 'users.CustomUser'
@@ -122,6 +123,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',
 ]
+
+# Use a background scheduler to periodically check for due notes
+BACKGROUND_SCHEDULE = 'notes.utils.start_scheduler'
 
 ROOT_URLCONF = 'notebook.urls'
 

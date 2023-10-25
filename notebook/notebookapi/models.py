@@ -11,6 +11,7 @@ class Note(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # due_date = datetime.now()
     due_date = models.DateTimeField(blank=True, null=True,default="datetime.date.today")
+    email_reminder = models.DateTimeField(null=True, blank=True)
     # category = models.CharField(max_length=100)
     CATEGORY_CHOICES = (
         ('unfinished', 'Unfinished'),
@@ -18,8 +19,7 @@ class Note(models.Model):
         ('done','Done')
     )
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='done')
-    
+    reminder = models.BooleanField(default=False)
 
     def __str__(self) :  #returns the title of the note
         return self.title 
-

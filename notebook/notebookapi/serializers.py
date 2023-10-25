@@ -22,6 +22,18 @@ This is the note serializer
 '''
 class NoteSerializer(serializers.ModelSerializer):
     date_created = RemoveTimeZone()
+    
     class Meta:
         model = Note
-        fields = ('pk', 'title', 'body', 'date_created', 'category','due_date')
+        fields = ('pk', 'title', 'body', 'date_created', 'category','due_date','email_reminder','reminder')
+   
+
+        # def update(self, instance, validated_data):
+        # Check if due_date is changed or other conditions for alert are no longer met
+            # if instance.due_date != validated_data.get('due_date'):
+            #     instance.alerted = False  # Note no longer requires alert
+            # instance.title = validated_data.get('title', instance.title)
+            # instance.body = validated_data.get('body', instance.content)
+            # instance.due_date = validated_data.get('due_date', instance.due_date)
+            # instance.save()
+            # return instance

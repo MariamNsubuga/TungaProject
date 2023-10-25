@@ -44,8 +44,17 @@ run the following commands:
 celery -A notebook worker -l info   (celery worker)
 celery -A notebook beat -l info (celery beat)
 make sure redis server is up and running (open in different terminals)
+incase of any errors run
+python3 manage.py migrate --run-syncdb
 
 #documentating the api
 used swagger for the api documentation
 http://localhost:8000/swagger/
 http://localhost:8000/redoc/
+
+
+##recommendations ##
+on how to improve the notes api application
+1.celery running and automating the tasks well for only new notes such that users dont get reminders for the old notes
+2. create a nice custom user model for login and register.
+3. writing test cases for the api
