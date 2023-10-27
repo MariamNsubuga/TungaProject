@@ -52,9 +52,14 @@ used swagger for the api documentation
 http://localhost:8000/swagger/
 http://localhost:8000/redoc/
 
+##Searching, filtering and ordering
+There is a filter icon that allows users to search by title, content and date
+filtering is done by category field
+ordering is done with the date, category, due date fields
+
 
 ##recommendations ##
 on how to improve the notes api application
-1.celery running and automating the tasks well for only new notes such that users dont get reminders for the old notes
-2. create a nice custom user model for login and register.
-3. writing test cases for the api
+1. create a nice custom user model for login and register.
+2. writing test cases for the api
+3. creating a frontend for the application
